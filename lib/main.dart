@@ -1,16 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:novi_test/provider/patient.provider.dart';
 import 'package:novi_test/screens/patients_lists/patient_details.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 
+import 'data/service/dio_base.service.dart';
+import 'provider/login/login_state_provider.dart';
 import 'provider/patient_date_time.provider.dart';
 import 'provider/patient_payment.provider.dart';
 import 'provider/patient_treatment.provider.dart';
 import 'screens/login/login_page.dart';
-import 'screens/register/patient_register.dart'; // Required for Future.delayed()
+import 'screens/register/patient_register.dart';
+import 'utils/config/config.dart'; // Required for Future.delayed()
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
+  await DioBaseService.init();
+
   runApp(const MyApp());
 }
 
@@ -27,7 +40,7 @@ class MyApp extends StatelessWidget {
           // home: const SplashScreen(),
           routes: {
             '/': (context) => const SplashScreen(),
-            '/login': (context) => const LoginPage(),
+            '/login': (context) => LoginPage(),
             '/home': (context) => const PatientsLists(),
             '/register': (context) => const RegisterPage(),
           },
@@ -35,6 +48,8 @@ class MyApp extends StatelessWidget {
       },
       providers: [
         // Add providers here
+        ChangeNotifierProvider(create: (_) => LoginState()),
+
         ChangeNotifierProvider(create: (_) => PatientProvider()),
         ChangeNotifierProvider(create: (_) => PatientTreatCountProvider()),
         ChangeNotifierProvider(create: (_) => PaymentState()),

@@ -4,7 +4,8 @@ import '../styles/font_styles.dart';
 
 class Config {
   static const String devEnvPath = 'assets/.env_dev';
-  static const String baseURL = "baseURL";
+  static const String baseURL = "https://flutter-amr.noviindus.in/api";
+  //https://flutter-amr.noviindus.in/api
   static const String loginToken = 'Logintoken';
 }
 
